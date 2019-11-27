@@ -9,7 +9,6 @@ import 'package:flutter/widgets.dart';
  * - Use
  * - Specify our error label using dart streams
  */
-
 class ErrorLabel extends StatelessWidget {
   ValueNotifier<String> text = new ValueNotifier("");
 
@@ -30,10 +29,15 @@ class ErrorLabel extends StatelessWidget {
 
 /// A Validator.
 class Validator {
-  static bool required({String value}) {
+  static bool required({String value, bool allowEmptySpaces = true}) {
     if (value == null || value.isEmpty) {
       return false;
     } else {
+      if (!allowEmptySpaces) { // Check if the string is not only made of empty spaces
+         if (RegExp(r"\s").hasMatch(value)) {
+           return false;
+         }
+      }
       return true; // passed
     }
   }
@@ -70,7 +74,7 @@ class Validator {
       if (!numberRegex.hasMatch(password)) return false;
     }
 
-    if (shouldContainNumber) {
+    if (shouldContainCapitalLetter) {
       final capitalRegex = RegExp(r"[A-Z]+");
       if (!capitalRegex.hasMatch(password)) return false;
     }

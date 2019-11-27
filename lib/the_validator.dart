@@ -96,6 +96,18 @@ class Validator {
 
   static isNumber(String value) {}
 
+  static bool minLength(String value, int minLength) {
+    if (value.isEmpty) return false;
+    if (value.length < minLength) return true;
+    else return false;
+  }
+
+  static bool maxLength(String value, int maxLength) {
+    if (value.isEmpty) return false;
+    if (value.length > maxLength) return true;
+    else return false;
+  }
+
 }
 
 class FieldValidators {
@@ -129,4 +141,17 @@ class FieldValidators {
       return null; // all validators were passed
     };
   }
+
+  static FormFieldValidator<String> regExp(
+      RegExp pattern, [String errorMessage]) {
+    return (value) {
+      if (value.isEmpty) return null;
+
+      if (pattern.hasMatch(value))
+        return null;
+      else
+        return errorMessage ?? "Do not match the required pattern rules";
+    };
+  }
+
 }

@@ -33,7 +33,7 @@ class Validator {
     return value != null;
   }*/
 
-  static bool isRequired({String value, bool allowEmptySpaces = true}) {
+  static bool isRequired(String value, {bool allowEmptySpaces = true}) {
     if (value == null || value.isEmpty) {
       return false;
     } else {
@@ -47,7 +47,7 @@ class Validator {
   }
 
   static bool isEmail(String email) {
-    if (!isRequired(value: email)) return false;
+    if (!isRequired(email)) return false;
 
     final emailRegex = RegExp(
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
@@ -99,15 +99,15 @@ class Validator {
   }
 
 
-  static isNumber(String value, {bool noSymbols = true}) {
+  static isNumber(String value, {bool allowSymbols = true}) {
     if (value == null) return false;
 
     var numericRegEx = RegExp(r"^[+-]?([0-9]*[.])?[0-9]+$");
     var numericNoSymbolsRegExp = RegExp(r"^[0-9]+$");
 
-    if (noSymbols) {
-      return numericNoSymbolsRegExp.hasMatch(value);
-    } else return numericRegEx.hasMatch(value);
+    if (allowSymbols) {
+      return numericRegEx.hasMatch(value);
+    } else return numericNoSymbolsRegExp.hasMatch(value);
 
   }
 
@@ -145,7 +145,7 @@ class Validator {
 
   static bool isAlphaNumeric(String value) {
     if (value == null) return false;
-    var alphaNumRegExp = RegExp(r"[0-9A-Z]+$");
+    var alphaNumRegExp = RegExp(r"[0-9A-Z]+");
     return alphaNumRegExp.hasMatch(value);
   }
 
@@ -171,7 +171,7 @@ class FieldValidator {
   /// You can override the error message
   static FormFieldValidator<String> required({String message}) {
     return (fieldValue) {
-      if (Validator.isRequired(value: fieldValue)) {
+      if (Validator.isRequired(fieldValue)) {
         return null;
       } else {
         return message ?? "This Field is Required";
@@ -226,7 +226,7 @@ class FieldValidator {
 
   static FormFieldValidator<String> number({bool noSymbols = true, String message}) {
     return (fieldValue) {
-      if (Validator.isNumber(fieldValue, noSymbols: noSymbols)) {
+      if (Validator.isNumber(fieldValue, allowSymbols: noSymbols)) {
         return null;
       } else {
         return message ?? "Field must be numbers only";

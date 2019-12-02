@@ -215,7 +215,7 @@ class FieldValidator {
       } else {
         valueToCompare = value;
       }
-      if (Validator.isEqualTo(fieldValue, "")) {
+      if (Validator.isEqualTo(fieldValue, valueToCompare)) {
         return null;
       } else {
         return message ?? "Email is not correct";

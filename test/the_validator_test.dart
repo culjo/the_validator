@@ -65,5 +65,10 @@ void main() {
     expect(Validator.isAlphaNumeric("alpha"), true);
   });
 
+  test("Min Length Validation", () {
+      expect(Validator.minLength("alpha", 8), false);
+      expect(Validator.minLength("goodness", 4), true);
+    });
+
 
 }

@@ -9,7 +9,7 @@ void main() {
     // final calculator = Validator();
     expect(Validator.isEmail("my.isEmail.com"), false);
     expect(Validator.isEmail("my@email.com"), true);
-    expect(Validator.isEmail("my@emailcom"), true); // Todo: this should fail (Please fix)
+    expect(Validator.isEmail("my@emailcom"), true);
 
     /*final calculator = Calculator();
     expect(calculator.addOne(2), 3);
@@ -61,13 +61,26 @@ void main() {
   });
 
   test("Alphanumeric Validation", () {
-    expect(Validator.isAlphaNumeric("alpha"), false);
+    expect(Validator.isAlphaNumeric("alph09a"), true);
     expect(Validator.isAlphaNumeric("alpha"), true);
+  });
+
+  test("Alpha Validation", () {
+    expect(Validator.isAlpha("alphabet"), true);
+    expect(Validator.isAlpha("al8phabet"), false);
+    expect(Validator.isAlpha("alph0abet"), false);
   });
 
   test("Min Length Validation", () {
       expect(Validator.minLength("alpha", 8), false);
       expect(Validator.minLength("goodness", 4), true);
+      expect(Validator.minLength("mini", 4), true);
+    });
+
+  test("Max Length Validation", () {
+      expect(Validator.maxLength("alpha", 8), true);
+      expect(Validator.maxLength("goodness", 4), false);
+      expect(Validator.maxLength("good", 4), true);
     });
 
 

@@ -3,7 +3,6 @@ library the_validator;
 //import 'package:flutter/widgets.dart' show FormFieldValidator;
 import 'package:flutter/widgets.dart';
 
-
 /// - Collect list of TextField controllers
 /// - Specify our error label using dart streams
 ///
@@ -28,7 +27,6 @@ class ErrorLabel extends StatelessWidget {
 
 /// A Validator.
 class Validator {
-
   /*static bool notNull(String value) {
     return value != null;
   }*/
@@ -37,10 +35,11 @@ class Validator {
     if (value == null || value.isEmpty) {
       return false;
     } else {
-      if (!allowEmptySpaces) { // Check if the string is not only made of empty spaces
-         if (RegExp(r"\s").hasMatch(value)) {
-           return false;
-         }
+      if (!allowEmptySpaces) {
+        // Check if the string is not only made of empty spaces
+        if (RegExp(r"\s").hasMatch(value)) {
+          return false;
+        }
       }
       return true; // passed
     }
@@ -58,15 +57,15 @@ class Validator {
   }
 
   /// Todo: Implement reason for failure
-  static bool isPassword(String password,
-      {int minLength = 4,
-      int maxLength,
-      bool shouldContainNumber = false,
-      bool shouldContainSpecialChars = false,
-      bool shouldContainCapitalLetter = false,
-        Function reason,
-      }) {
-
+  static bool isPassword(
+    String password, {
+    int minLength = 4,
+    int maxLength,
+    bool shouldContainNumber = false,
+    bool shouldContainSpecialChars = false,
+    bool shouldContainCapitalLetter = false,
+    Function reason,
+  }) {
     if (password.length < minLength) return false;
 
     if (maxLength != null) {
@@ -90,14 +89,14 @@ class Validator {
     }
 
     return true;
-
   }
 
   static bool isEqualTo(dynamic value, dynamic valueToCompare) {
-    if (value == valueToCompare) return true;
-    else return false;
+    if (value == valueToCompare)
+      return true;
+    else
+      return false;
   }
-
 
   static isNumber(String value, {bool allowSymbols = true}) {
     if (value == null) return false;
@@ -107,20 +106,24 @@ class Validator {
 
     if (allowSymbols) {
       return numericRegEx.hasMatch(value);
-    } else return numericNoSymbolsRegExp.hasMatch(value);
-
+    } else
+      return numericNoSymbolsRegExp.hasMatch(value);
   }
 
   static bool minLength(String value, int minLength) {
     if (value.isEmpty) return false;
-    if (value.length < minLength) return true;
-    else return false;
+    if (value.length >= minLength)
+      return true;
+    else
+      return false;
   }
 
   static bool maxLength(String value, int maxLength) {
     if (value.isEmpty) return false;
-    if (value.length > maxLength) return true;
-    else return false;
+    if (value.length <= maxLength)
+      return true;
+    else
+      return false;
   }
 
   static bool maxValue(double value, double maxValue) {
@@ -145,13 +148,17 @@ class Validator {
 
   static bool isAlphaNumeric(String value) {
     if (value == null) return false;
-    var alphaNumRegExp = RegExp(r"[0-9A-Z]+");
+    var alphaNumRegExp = RegExp(r"^[0-9A-Z]+$",caseSensitive: false);
     return alphaNumRegExp.hasMatch(value);
   }
 
+  static bool isAlpha(String value) {
+    if (value == null) return false;
+    var alphaRegExp = RegExp(r"^[A-Z]+$", caseSensitive: false);
+    return alphaRegExp.hasMatch(value);
+  }
 
-  // Todo:
-  static bool _isUrl(String url) {
+/*static bool _isUrl(String url) {
     return false;
   }
 
@@ -162,8 +169,7 @@ class Validator {
 
   _isDateGreater() {
 
-  }
-
+  }*/
 
 }
 
@@ -189,8 +195,9 @@ class FieldValidator {
     };
   }
 
-
-  static FormFieldValidator<String> password({String errorMessage, int minLength = 4,
+  static FormFieldValidator<String> password({
+    String errorMessage,
+    int minLength = 4,
     int maxLength,
     bool shouldContainNumber = false,
     bool shouldContainSpecialChars = false,
@@ -198,7 +205,14 @@ class FieldValidator {
     Function reason,
   }) {
     return (fieldValue) {
-      if (Validator.isPassword(fieldValue)) {
+      if (Validator.isPassword(
+        fieldValue,
+        minLength: minLength,
+        maxLength: maxLength,
+        shouldContainSpecialChars: shouldContainSpecialChars,
+        shouldContainCapitalLetter: shouldContainCapitalLetter,
+        shouldContainNumber: shouldContainNumber,
+      )) {
         return null;
       } else {
         return errorMessage ?? "Email is not correct";
@@ -208,7 +222,6 @@ class FieldValidator {
 
   static FormFieldValidator<String> equalTo(dynamic value, {String message}) {
     return (fieldValue) {
-
       var valueToCompare;
       if (value is TextEditingController) {
         valueToCompare = value.text;
@@ -223,8 +236,8 @@ class FieldValidator {
     };
   }
 
-
-  static FormFieldValidator<String> number({bool noSymbols = true, String message}) {
+  static FormFieldValidator<String> number(
+      {bool noSymbols = true, String message}) {
     return (fieldValue) {
       if (Validator.isNumber(fieldValue, allowSymbols: noSymbols)) {
         return null;
@@ -244,7 +257,6 @@ class FieldValidator {
     };
   }
 
-
   static FormFieldValidator<String> minLength(int minLength, {String message}) {
     return (fieldValue) {
       if (Validator.minLength(fieldValue, minLength)) {
@@ -254,7 +266,6 @@ class FieldValidator {
       }
     };
   }
-
 
   static FormFieldValidator<String> maxLength(int maxLength, {String message}) {
     return (fieldValue) {
@@ -266,10 +277,15 @@ class FieldValidator {
     };
   }
 
-  static FormFieldValidator<String> maxValue({double maxValue, String message}) {
+  static FormFieldValidator<String> maxValue(
+      {double maxValue, String message}) {
     return (fieldValue) {
-      if (fieldValue.trim().isEmpty) return message ?? "Field must be lesser than $maxValue";
-      double dFieldValue = double.parse(fieldValue.replaceAll(" ", "").replaceAll(",", "").replaceAll(".", ""));
+      if (fieldValue.trim().isEmpty)
+        return message ?? "Field must be lesser than $maxValue";
+      double dFieldValue = double.parse(fieldValue
+          .replaceAll(" ", "")
+          .replaceAll(",", "")
+          .replaceAll(".", ""));
       if (Validator.maxValue(dFieldValue, maxValue)) {
         return null;
       } else {
@@ -278,10 +294,15 @@ class FieldValidator {
     };
   }
 
-  static FormFieldValidator<String> minValue({double minValue, String message}) {
+  static FormFieldValidator<String> minValue(
+      {double minValue, String message}) {
     return (fieldValue) {
-      if (fieldValue.trim().isEmpty) return message ?? "Field must be greater than $maxValue";
-      double dFieldValue = double.parse(fieldValue.replaceAll(" ", "").replaceAll(",", "").replaceAll(".", ""));
+      if (fieldValue.trim().isEmpty)
+        return message ?? "Field must be greater than $maxValue";
+      double dFieldValue = double.parse(fieldValue
+          .replaceAll(" ", "")
+          .replaceAll(",", "")
+          .replaceAll(".", ""));
       if (Validator.minValue(dFieldValue, minValue)) {
         return null;
       } else {
@@ -290,9 +311,8 @@ class FieldValidator {
     };
   }
 
-
-  static FormFieldValidator<String> regExp(
-      RegExp pattern, [String errorMessage]) {
+  static FormFieldValidator<String> regExp(RegExp pattern,
+      [String errorMessage]) {
     return (value) {
       if (value.isEmpty) return null;
 
@@ -303,8 +323,8 @@ class FieldValidator {
     };
   }
 
-
-  static FormFieldValidator multiple (List<FormFieldValidator<String>> validators) {
+  static FormFieldValidator multiple(
+      List<FormFieldValidator<String>> validators) {
     return (fieldValue) {
       for (FormFieldValidator validator in validators) {
         var outcome = validator(fieldValue);
@@ -313,6 +333,4 @@ class FieldValidator {
       return null; // all validators were passed
     };
   }
-
-
 }

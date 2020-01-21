@@ -14,9 +14,25 @@ The Validator can also be used as a stand alone validator
 ```dart
 TextFormField( 
     controller: _emailController,
-                  validator: FieldValidator.email(),
-                  decoration: InputDecoration(labelText: "Email"),
-                ),
+    validator: FieldValidator.email(),
+    decoration: InputDecoration(labelText: "Email"),
+    ),
+                
+ TextFormField( 
+    controller: _passwordController,
+        validator: FieldValidator.password(
+        minLength: 8,
+        shouldContainNumber: true,
+        shouldContainCapitalLetter: true,
+        shouldContainSpecialChars: true,
+        errorMessage: "Password must match the required format",
+        isNumberNotPresent: () { return "Password must contain number"; },
+        isSpecialCharsNotPresent: () { return "Password must contain special characters"; },
+        isCapitalLetterNotPresent: () { return "Password must contain capital letters"; }
+        ),
+        decoration: InputDecoration(labelText: "Email"),
+    ),
+                
 ```
 
 Then make a call to `.validate()` to perform 

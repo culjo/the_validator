@@ -1,3 +1,6 @@
+## [1.0.1]
+* stops email validation from accepting e.g myemail@gmail as a valid email
+* set custom error message on individual password validation rules
 ## [1.0.0]
 * Fixed failing validation on password form fields
 * MinLength & MaxLength validation fix

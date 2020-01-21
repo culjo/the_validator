@@ -7,9 +7,10 @@ import 'package:the_validator/the_validator.dart';
 void main() {
   test('Check if the string is a valid email', () {
     // final calculator = Validator();
-    expect(Validator.isEmail("my.isEmail.com"), false);
     expect(Validator.isEmail("my@email.com"), true);
-    expect(Validator.isEmail("my@emailcom"), true);
+    expect(Validator.isEmail("my.isEmail.com"), false);
+    expect(Validator.isEmail("email@gmail"), false);
+    expect(Validator.isEmail("my@emailcom"), false);
 
     /*final calculator = Calculator();
     expect(calculator.addOne(2), 3);
@@ -37,6 +38,13 @@ void main() {
       expect(Validator.isPassword("Qwerty1%", shouldContainSpecialChars: true, shouldContainCapitalLetter: true, shouldContainNumber: true), true);
       expect(Validator.isPassword("Qwertyuiop1%", minLength: 10, shouldContainSpecialChars: true, shouldContainCapitalLetter: true, shouldContainNumber: true), true);
       expect(Validator.isPassword("Qwerty100#", maxLength: 10, shouldContainSpecialChars: true, shouldContainCapitalLetter: true, shouldContainNumber: true), true);
+      expect(Validator.isPassword("Qwerty100#", maxLength: 10, shouldContainSpecialChars: true,
+          shouldContainCapitalLetter: true,
+          shouldContainNumber: true,
+          isSpecialCharsPresent: (bool present) {
+            print("isSpecialCharsPresent : $present");
+          }), true);
+
 
     });
 

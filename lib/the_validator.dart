@@ -48,8 +48,13 @@ class Validator {
   static bool isEmail(String email) {
     if (!isRequired(email)) return false;
 
+    // final emailRegex = RegExp(
+    // r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+
+    // RegExp(r'(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])');
+
     final emailRegex = RegExp(
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+        r"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$");
     if (emailRegex.hasMatch(email))
       return true;
     else
@@ -65,27 +70,47 @@ class Validator {
     bool shouldContainSpecialChars = false,
     bool shouldContainCapitalLetter = false,
     Function reason,
+    void Function(bool) isNumberPresent,
+    void Function(bool) isSpecialCharsPresent,
+    void Function(bool) isCapitalLetterPresent,
+        void Function() isMaxLengthFailed,
+        void Function() isMinLengthFailed,
   }) {
-    if (password.length < minLength) return false;
+    if (password.length < minLength) {
+      if (isMinLengthFailed != null) isMinLengthFailed();
+      return false;
+    }
 
     if (maxLength != null) {
-      if (password.length > maxLength) return false;
+      if (password.length > maxLength) {
+        if (isMaxLengthFailed != null) isMaxLengthFailed();
+        return false;
+      }
     }
 
     if (shouldContainNumber) {
       final numberRegex = RegExp(r"[0-9]+");
-      if (!numberRegex.hasMatch(password)) return false;
+      if (!numberRegex.hasMatch(password)) {
+        if (isNumberPresent != null) isNumberPresent(false);
+        return false;
+      } else if (isNumberPresent != null) isNumberPresent(true);
     }
 
     if (shouldContainCapitalLetter) {
       final capitalRegex = RegExp(r"[A-Z]+");
-      if (!capitalRegex.hasMatch(password)) return false;
+      if (!capitalRegex.hasMatch(password)) {
+        if (isCapitalLetterPresent != null) isCapitalLetterPresent(false);
+        return false;
+      } else if (isCapitalLetterPresent != null) isCapitalLetterPresent(true);
     }
 
     if (shouldContainSpecialChars) {
 //      final numberRegex = RegExp(r'(?=.*?[#?!@$%^&*-])');
       final specialRegex = RegExp(r"[\'^£$%&*()}{@#~?><>,|=_+¬-]");
-      if (!specialRegex.hasMatch(password)) return false;
+      if (!specialRegex.hasMatch(password)) {
+        if (isSpecialCharsPresent != null) isSpecialCharsPresent(false);
+        return false;
+      } else if (isSpecialCharsPresent != null) isSpecialCharsPresent(true);
     }
 
     return true;
@@ -148,7 +173,7 @@ class Validator {
 
   static bool isAlphaNumeric(String value) {
     if (value == null) return false;
-    var alphaNumRegExp = RegExp(r"^[0-9A-Z]+$",caseSensitive: false);
+    var alphaNumRegExp = RegExp(r"^[0-9A-Z]+$", caseSensitive: false);
     return alphaNumRegExp.hasMatch(value);
   }
 
@@ -203,8 +228,13 @@ class FieldValidator {
     bool shouldContainSpecialChars = false,
     bool shouldContainCapitalLetter = false,
     Function reason,
+    String Function() isNumberNotPresent,
+    String Function() isSpecialCharsNotPresent,
+    String Function() isCapitalLetterNotPresent,
   }) {
     return (fieldValue) {
+      var mainError = errorMessage;
+
       if (Validator.isPassword(
         fieldValue,
         minLength: minLength,
@@ -212,10 +242,19 @@ class FieldValidator {
         shouldContainSpecialChars: shouldContainSpecialChars,
         shouldContainCapitalLetter: shouldContainCapitalLetter,
         shouldContainNumber: shouldContainNumber,
+        isNumberPresent: (present) {
+          if (!present) mainError = isNumberNotPresent();
+        },
+        isCapitalLetterPresent: (present) {
+          if (!present) mainError = isCapitalLetterNotPresent();
+        },
+        isSpecialCharsPresent: (present) {
+          if (!present) mainError = isSpecialCharsNotPresent();
+        },
       )) {
         return null;
       } else {
-        return errorMessage ?? "Email is not correct";
+        return mainError ?? "Password must match the required format";
       }
     };
   }
@@ -231,7 +270,7 @@ class FieldValidator {
       if (Validator.isEqualTo(fieldValue, valueToCompare)) {
         return null;
       } else {
-        return message ?? "Email is not correct";
+        return message ?? "Values do not match";
       }
     };
   }

@@ -73,9 +73,16 @@ class Validator {
     void Function(bool) isNumberPresent,
     void Function(bool) isSpecialCharsPresent,
     void Function(bool) isCapitalLetterPresent,
-        void Function() isMaxLengthFailed,
-        void Function() isMinLengthFailed,
+    void Function() isMaxLengthFailed,
+    void Function() isMinLengthFailed,
   }) {
+    if (password == null) {
+      return false;
+    }
+    if (password.trim().length == 0) {
+      return false;
+    }
+
     if (password.length < minLength) {
       if (isMinLengthFailed != null) isMinLengthFailed();
       return false;

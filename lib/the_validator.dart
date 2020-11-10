@@ -113,7 +113,7 @@ class Validator {
 
     if (shouldContainSpecialChars) {
 //      final numberRegex = RegExp(r'(?=.*?[#?!@$%^&*-])');
-      final specialRegex = RegExp(r"[\'^£$%&*()}{@#~?><>,|=_+¬-]");
+      final specialRegex = RegExp(r"[\'^£$%!&*()}{@#~?><>,|=_+¬-]");
       if (!specialRegex.hasMatch(password)) {
         if (isSpecialCharsPresent != null) isSpecialCharsPresent(false);
         return false;

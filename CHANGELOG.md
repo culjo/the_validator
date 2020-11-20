@@ -1,3 +1,6 @@
+## [1.0.3]
+* minor additions to password special characters validation
+* [Breaking Change] renamed `isNumberNotPresent()` to `onNumberNotPresent()`, `isCapitalLetterNotPresent()` to `onCapitalLetterNotPresent()` and `isSpecialCharsNotPresent()` to `onSpecialCharsNotPresent()` 
 ## [1.0.1]
 * stops email validation from accepting e.g myemail@gmail as a valid email
 * set custom error message on individual password validation rules

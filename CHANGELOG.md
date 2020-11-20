@@ -1,3 +1,5 @@
+## [1.0.3]
+* minor additions to password special characters validation
 ## [1.0.1]
 * stops email validation from accepting e.g myemail@gmail as a valid email
 * set custom error message on individual password validation rules

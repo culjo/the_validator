@@ -87,12 +87,14 @@ class _FormScreenState extends State<FormScreen> {
                     Expanded(
                       child: TextFormField(
                         controller: _passwordController,
-                        obscureText: true,
+                        obscureText: false,
                         validator: FieldValidator.password(
                             minLength: 6,
                             maxLength: 10,
                             shouldContainNumber: true,
-                            shouldContainCapitalLetter: true),
+                            shouldContainCapitalLetter: true,
+                          shouldContainSpecialChars: true,
+                        ),
                         decoration: InputDecoration(labelText: "Password"),
                       ),
                     ),

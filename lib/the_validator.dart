@@ -113,7 +113,7 @@ class Validator {
 
     if (shouldContainSpecialChars) {
 //      final numberRegex = RegExp(r'(?=.*?[#?!@$%^&*-])');
-      final specialRegex = RegExp(r"[\'^£$%!&*()}{@#~?><>,|=_+¬-]");
+      final specialRegex = RegExp(r"[\'^£$%!&*()}{@#~?><>,.|=_+¬-]");
       if (!specialRegex.hasMatch(password)) {
         if (isSpecialCharsPresent != null) isSpecialCharsPresent(false);
         return false;
@@ -235,9 +235,9 @@ class FieldValidator {
     bool shouldContainSpecialChars = false,
     bool shouldContainCapitalLetter = false,
     Function reason,
-    String Function() isNumberNotPresent,
-    String Function() isSpecialCharsNotPresent,
-    String Function() isCapitalLetterNotPresent,
+    String Function() onNumberNotPresent,
+    String Function() onSpecialCharsNotPresent,
+    String Function() onCapitalLetterNotPresent,
   }) {
     return (fieldValue) {
       var mainError = errorMessage;
@@ -250,13 +250,13 @@ class FieldValidator {
         shouldContainCapitalLetter: shouldContainCapitalLetter,
         shouldContainNumber: shouldContainNumber,
         isNumberPresent: (present) {
-          if (!present) mainError = isNumberNotPresent();
+          if (!present) mainError = onNumberNotPresent();
         },
         isCapitalLetterPresent: (present) {
-          if (!present) mainError = isCapitalLetterNotPresent();
+          if (!present) mainError = onCapitalLetterNotPresent();
         },
         isSpecialCharsPresent: (present) {
-          if (!present) mainError = isSpecialCharsNotPresent();
+          if (!present) mainError = onSpecialCharsNotPresent != null ? onSpecialCharsNotPresent() : "Password must contain special character";
         },
       )) {
         return null;

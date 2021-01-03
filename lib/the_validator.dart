@@ -369,10 +369,9 @@ class FieldValidator {
     };
   }
 
-  static FormFieldValidator multiple(
-      List<FormFieldValidator<String>> validators) {
+  static FormFieldValidator multiple(List<FormFieldValidator<String>> validators) {
     return (fieldValue) {
-      for (FormFieldValidator validator in validators) {
+      for (FormFieldValidator<String> validator in validators) {
         var outcome = validator(fieldValue);
         if (outcome != null) return outcome;
       }

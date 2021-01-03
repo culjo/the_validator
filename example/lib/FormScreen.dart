@@ -112,6 +112,26 @@ class _FormScreenState extends State<FormScreen> {
                   ],
                 ),
 
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        // controller: _numberController,
+                        validator: FieldValidator.multiple([
+                          FieldValidator.regExp(RegExp('(?:[2-8]|9[1-9])[0-9]{3}\-[0-9]{4}\$'), 'Note a valid code'),
+                          FieldValidator.required()
+                        ]),
+                        decoration: InputDecoration(
+                          labelText: "Multiple Validator",
+                          hintText: "2978-7766"
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+
+                  ],
+                ),
+
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: RaisedButton(

@@ -1,3 +1,7 @@
+## [2.0.0]
+* Update SDK constraints to >=2.12.0-0 <3.0.0
+* Stable release for null safety.
+* Added checks for space in email validation
 ## [1.0.5]
 * Added property `shouldContainSmallLetter` to password validator
 ## [1.0.4]

@@ -1,3 +1,5 @@
+## [1.0.5]
+* Added property `shouldContainSmallLetter` to password validator
 ## [1.0.4]
 * Minor fixes done for FieldValidator.multiple()
 ## [1.0.3]

@@ -24,6 +24,7 @@ TextFormField(
         minLength: 8,
         shouldContainNumber: true,
         shouldContainCapitalLetter: true,
+        shouldContainSmallLetter: true,
         shouldContainSpecialChars: true,
         errorMessage: "Password must match the required format",
         isNumberNotPresent: () { return "Password must contain number"; },
@@ -32,10 +33,21 @@ TextFormField(
         ),
         decoration: InputDecoration(labelText: "Email"),
     ),
-                
+
 ```
 
-Then make a call to `.validate()` to perform 
+To validate confirm password field
+```dart
+  // To validate confirm password field
+  TextFormField(
+      controller: _confirmPasswordController,
+      obscureText: true,
+      validator: FieldValidator.equalTo(_passwordController, message: "Password Mismatch"),
+      decoration: InputDecoration(labelText: "Confirm Password"),
+  )
+```
+
+Then make a call to formState `.validate()` to perform the validations on the textfields 
 ```dart
 
 RaisedButton(

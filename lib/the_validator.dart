@@ -27,10 +27,6 @@ class ErrorLabel extends StatelessWidget {
 
 /// A Validator.
 class Validator {
-  /*static bool notNull(String value) {
-    return value != null;
-  }*/
-
   static bool isRequired(String value, {bool allowEmptySpaces = true}) {
     if (value == null || value.isEmpty) {
       return false;
@@ -62,6 +58,7 @@ class Validator {
   }
 
   /// Todo: Implement reason for failure
+  /// For Validated passwords strings
   static bool isPassword(
     String password, {
     int minLength = 4,
@@ -69,10 +66,12 @@ class Validator {
     bool shouldContainNumber = false,
     bool shouldContainSpecialChars = false,
     bool shouldContainCapitalLetter = false,
+    bool shouldContainSmallLetter = false,
     Function reason,
     void Function(bool) isNumberPresent,
     void Function(bool) isSpecialCharsPresent,
     void Function(bool) isCapitalLetterPresent,
+    void Function(bool) isSmallLetterPresent,
     void Function() isMaxLengthFailed,
     void Function() isMinLengthFailed,
   }) {
@@ -109,6 +108,14 @@ class Validator {
         if (isCapitalLetterPresent != null) isCapitalLetterPresent(false);
         return false;
       } else if (isCapitalLetterPresent != null) isCapitalLetterPresent(true);
+    }
+
+    if (shouldContainSmallLetter) {
+      final smallLetterRegex = RegExp(r"[a-z]+");
+      if (!smallLetterRegex.hasMatch(password)) {
+        if (isSmallLetterPresent != null) isSmallLetterPresent(false);
+        return false;
+      } else if (isSmallLetterPresent != null) isSmallLetterPresent(true);
     }
 
     if (shouldContainSpecialChars) {
@@ -234,6 +241,7 @@ class FieldValidator {
     bool shouldContainNumber = false,
     bool shouldContainSpecialChars = false,
     bool shouldContainCapitalLetter = false,
+    bool shouldContainSmallLetter = false,
     Function reason,
     String Function() onNumberNotPresent,
     String Function() onSpecialCharsNotPresent,
@@ -248,6 +256,7 @@ class FieldValidator {
         maxLength: maxLength,
         shouldContainSpecialChars: shouldContainSpecialChars,
         shouldContainCapitalLetter: shouldContainCapitalLetter,
+        shouldContainSmallLetter: shouldContainSmallLetter,
         shouldContainNumber: shouldContainNumber,
         isNumberPresent: (present) {
           if (!present) mainError = onNumberNotPresent();
@@ -256,7 +265,10 @@ class FieldValidator {
           if (!present) mainError = onCapitalLetterNotPresent();
         },
         isSpecialCharsPresent: (present) {
-          if (!present) mainError = onSpecialCharsNotPresent != null ? onSpecialCharsNotPresent() : "Password must contain special character";
+          if (!present)
+            mainError = onSpecialCharsNotPresent != null
+                ? onSpecialCharsNotPresent()
+                : "Password must contain special character";
         },
       )) {
         return null;
@@ -369,7 +381,8 @@ class FieldValidator {
     };
   }
 
-  static FormFieldValidator multiple(List<FormFieldValidator<String>> validators) {
+  static FormFieldValidator multiple(
+      List<FormFieldValidator<String>> validators) {
     return (fieldValue) {
       for (FormFieldValidator<String> validator in validators) {
         var outcome = validator(fieldValue);

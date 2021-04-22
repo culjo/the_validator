@@ -38,15 +38,15 @@ class _FormScreenState extends State<FormScreen> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-
                 TextFormField(
                   controller: _fullnameController,
-                  validator: FieldValidator.required(message: "Your full name is required"),
+                  validator: FieldValidator.required(
+                      message: "Your full name is required"),
                   decoration: InputDecoration(labelText: "Fullname"),
                 ),
-
-                SizedBox(height: 10,),
-
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   children: <Widget>[
                     Expanded(
@@ -54,14 +54,14 @@ class _FormScreenState extends State<FormScreen> {
                         controller: _numberController,
                         validator: FieldValidator.number(),
                         decoration: InputDecoration(
-                            labelText: "Mobile Number",
-
+                          labelText: "Mobile Number",
                         ),
                         keyboardType: TextInputType.number,
                       ),
                     ),
-                    SizedBox(width: 10,),
-
+                    SizedBox(
+                      width: 10,
+                    ),
                     Expanded(
                       child: TextFormField(
                         controller: _usernameController,
@@ -71,17 +71,17 @@ class _FormScreenState extends State<FormScreen> {
                     ),
                   ],
                 ),
-
-                SizedBox(height: 10,),
-
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
                   controller: _emailController,
                   validator: FieldValidator.email(),
                   decoration: InputDecoration(labelText: "Email"),
                 ),
-
-                SizedBox(height: 10,),
-
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   children: <Widget>[
                     Expanded(
@@ -89,55 +89,57 @@ class _FormScreenState extends State<FormScreen> {
                         controller: _passwordController,
                         obscureText: false,
                         validator: FieldValidator.password(
-                            minLength: 6,
-                            maxLength: 10,
-                            shouldContainNumber: true,
-                            shouldContainCapitalLetter: true,
+                          minLength: 6,
+                          maxLength: 10,
+                          shouldContainNumber: true,
+                          shouldContainCapitalLetter: true,
+                          shouldContainSmallLetter: true,
                           shouldContainSpecialChars: true,
                         ),
                         decoration: InputDecoration(labelText: "Password"),
                       ),
                     ),
-
-                    SizedBox(width: 10,),
-
+                    SizedBox(
+                      width: 10,
+                    ),
                     Expanded(
                       child: TextFormField(
                         controller: _confirmPasswordController,
                         obscureText: true,
-                        validator: FieldValidator.equalTo(_passwordController, message: "Password Mismatch"),
-                        decoration: InputDecoration(labelText: "Confirm Password"),
+                        validator: FieldValidator.equalTo(_passwordController,
+                            message: "Password Mismatch"),
+                        decoration:
+                            InputDecoration(labelText: "Confirm Password"),
                       ),
                     ),
                   ],
                 ),
-
                 Row(
                   children: <Widget>[
                     Expanded(
                       child: TextFormField(
                         // controller: _numberController,
                         validator: FieldValidator.multiple([
-                          FieldValidator.regExp(RegExp('(?:[2-8]|9[1-9])[0-9]{3}\-[0-9]{4}\$'), 'Note a valid code'),
+                          FieldValidator.regExp(
+                              RegExp('(?:[2-8]|9[1-9])[0-9]{3}\-[0-9]{4}\$'),
+                              'Note a valid code'),
                           FieldValidator.required()
                         ]),
                         decoration: InputDecoration(
-                          labelText: "Multiple Validator",
-                          hintText: "2978-7766"
-                        ),
+                            labelText: "Multiple Validator",
+                            hintText: "2978-7766"),
                         keyboardType: TextInputType.number,
                       ),
                     ),
-
                   ],
                 ),
-
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: RaisedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Yay! we got it right!")));
+                        _scaffoldKey.currentState.showSnackBar(
+                            SnackBar(content: Text("Yay! we got it right!")));
                       }
                     },
                     child: Text("Submit"),
